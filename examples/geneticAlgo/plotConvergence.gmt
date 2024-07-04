@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+# set up parameters
+
+xmin=1
+xmax=5.1
+ymin=0
+ymax=60
+
+FRAME=-R${xmin}/${xmax}/${ymin}/${ymax}
+VIEW=-JX25c/15c
+
+gmt set PS_MEDIA A4
+
+# plot initial solution
+
+gmt begin convergence pdf
+
+gmt psbasemap ${FRAME} ${VIEW} \
+-BWeSn+t"Convergence of path length" \
+-Bxa1f0.5+l"log 10 iteration" \
+-Bya10f5+l"total distance"
+
+
+gmt psxy convergence.dat  ${FRAME} ${VIEW} -Gblue   -Sp0.1
+
+gmt end
+
+# plot final solution
