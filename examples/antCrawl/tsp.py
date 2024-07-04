@@ -17,18 +17,11 @@ def length(x, y, path):
 
 	length = 0.0
 
-#	print ("lx: ", x)
-#	print ("ly: ", y)
-#	print ("lp: ", path)
-
-
-
 	for iCity in range (0, nCities-1):
 
 		distance = math.sqrt(pow(x[path[iCity]] - x[path[iCity+1]], 2) + \
 							 pow(y[path[iCity]] - y[path[iCity+1]], 2))
 
-#		print("distance", distance)
 		length = length + distance
 #	endfor
 
@@ -36,8 +29,6 @@ def length(x, y, path):
 						 pow(y[path[nCities-1]] - y[path[0]], 2))
 
 	length = length + distance
-
-#	print("length of route", length)
 
 	return length
 
@@ -87,9 +78,6 @@ for iCity in range(0, nCities):
 	y[iCity] = random.uniform(0.0, 1.0)
 # endfor
 
-#print ("x: ", x)
-#print ("y: ", y)
-
 for iCity in range(0, nCities):
 	for jCity in range(0, nCities):
 		distance = math.sqrt(pow(x[iCity] - x[jCity],2) + \
@@ -99,20 +87,12 @@ for iCity in range(0, nCities):
 #	endfor
 # endfor
 
-#print ("distance: ", distances)
-
-
-
 # set base pheronomes
 for iCity in range(0, nCities):
 	for jCity in range(0, nCities):
 		pheromones[iCity, jCity] = 1.0
 #	endfor
 # endfor
-
-#print ("pheromones: ", pheromones)
-
-
 
 # let the ants walk
 for iAnt in range (0, nAnts):
@@ -121,9 +101,6 @@ for iAnt in range (0, nAnts):
 
 	for iCity in range(1, nCities):
 
-#		print("------ finding city", iCity, "-------")
-
-
 		weAreHere = path[iCity-1]
 		togo = [0 for n in range(nCities)]
 		togoEntry = 0
@@ -131,78 +108,41 @@ for iAnt in range (0, nAnts):
 		# determine the next city, by
 		# 1) make a list of all the still unvisited cities
 		for jCity in range(1, nCities):
-#			print("check if route ", path, "has city: ", jCity)
 			if (0 == routeHasCity(path, jCity)):
-#				print("no, it does not! Add it in the togo")
 				# yay, we found a city we have not visited yet
 
 				togoEntry = togoEntry + 1
 				togo[togoEntry-1] = jCity
-#			else:
-#				print("yes, it does! Do not Add it in the togo")
 #			endif
 #		endfor
-
-#		print("available cities: ")
-#		print("togo:", togo)
 
 		# 2) check how nice every city is, based on distance
 		#	and deposited pheromones
 		howNice = numpy.zeros(nCities)
-#		print("ini howNice: ", howNice)
 		for jCity in range(0, togoEntry):
 			destination = togo[jCity]
-
-#			print("full howNice pos", jCity + 1, weAreHere, destination)
 
 			howNice[jCity+1] = pheromones[weAreHere, destination] / \
 						 		distances[weAreHere, destination]
 #		endfor
-
-
-#		print("how nice to go to cities: ")
-#		print("howNice:", howNice)
-
 
 		for jCity in range(1, togoEntry+1):
 			howNice[jCity] = howNice[jCity-1] + \
 							 howNice[jCity]
 # 		endfor
 
-#		print("cumulative how nice to go to cities: ")
-#		print("howNice:", howNice)
-
-
 		r = random.uniform(0.0, 1.0)
 		selection = r * howNice[togoEntry]
-
-#		print("finding spot: ", selection)
-#		print("togoEntry: ", togoEntry)
 
 		for jCity in range(0, togoEntry):
 			if ((selection > howNice[jCity]) and \
 				(selection < howNice[jCity+1])):
 
-#				print("between ", jCity, " and ", jCity+1)
-#				print("selected next destination: ", togo[jCity])
-
-
 				path[iCity] = togo[jCity]
 
 #			endif
 #		endfor
-
-#		print("Path after this step: ")
-#		print("path:", path)
-
 #	endfor
-
-#	print("The ant has walked the path: ")
-#	print(path)
-
-
-#	sys.exit()
-
 
 # write initial solution to file, for plotting to compare with the final solution
 	if (0 == iAnt):
